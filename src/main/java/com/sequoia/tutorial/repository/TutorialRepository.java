@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sequoia.tutorial.models.TutorialModel;
@@ -26,8 +27,14 @@ public interface TutorialRepository extends JpaRepository<TutorialModel, Long> {
     @Query(value = "SELECT t FROM TutorialModel t JOIN t.sourceId s ORDER BY s.name",
             countQuery = "SELECT COUNT(t) FROM TutorialModel t")
     Page<TutorialModel> findAllWithPaginationAndSort(Pageable pageable);
-}
 
-//    List<TutorialModel> findAll(PageRequest page);
+    List<TutorialModel> findBySubTopicsId_NameInAndActiveIsTrue(
+            List<String> subtopicsname
+    );
+    List<TutorialModel> findBySubTopicsId_NameInAndActiveIsTrue(
+            List<String> subtopicsname,
+            PageRequest page
+    );
+}
 
 

@@ -1,5 +1,7 @@
 package com.sequoia.tutorial.controllers;
 
+import com.sequoia.tutorial.models.ResponseData;
+import com.sequoia.tutorial.service.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +15,15 @@ import java.util.List;
 @RequestMapping("api/")
 @CrossOrigin("*")
 public class SubTopicsController {
-    private final SubTopicsRepository subTopicsRepository;
-
     @Autowired
-    public SubTopicsController(SubTopicsRepository subTopicsRepository) {
-        this.subTopicsRepository = subTopicsRepository;
+    Services services;
+    @GetMapping("/fetchSubTopics")
+    public ResponseData subTopicsTopic(@RequestParam String topicName){
+        return services.fetchSubTopics(topicName);
     }
 
-    @GetMapping("/fetchSubTopics")
-    public List<SubTopicsModel> subTopicsTopic(@RequestParam String topicName){
-        Sort sort = Sort.by("name").ascending();
-        return subTopicsRepository.findByTopicsID_NameAndActive(topicName, true,sort);
+    @GetMapping("/fetchMultipleSubTopics")
+    public  ResponseData multipleSubtopics(@RequestParam List<String> topicNames){
+        return services.fetchMultipleSubTopics(topicNames);
     }
 }
