@@ -14,6 +14,9 @@ public class TopicsController {
     @Autowired
     Services services;
 
+    /**
+     * @return
+     */
     @GetMapping("/fetchTopics")
     public ResponseData topicsModelList(){
         return services.fetchTopics();

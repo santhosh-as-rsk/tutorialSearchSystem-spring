@@ -1,6 +1,5 @@
 package com.sequoia.tutorial.service;
 
-
 import com.sequoia.tutorial.models.ResponseData;
 
 import java.util.List;

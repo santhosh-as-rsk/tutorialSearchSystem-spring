@@ -1,10 +1,17 @@
 package com.sequoia.tutorial.models;
 
-public class ResponseData {
+import java.io.Serializable;
+
+public class ResponseData implements Serializable {
     private int statusCode;
     private String message;
     private Object outputData;
 
+    /**
+     * @param statusCode
+     * @param message
+     * @param outputData
+     */
     public ResponseData(int statusCode, String message, Object outputData) {
         this.statusCode = statusCode;
         this.message = message;

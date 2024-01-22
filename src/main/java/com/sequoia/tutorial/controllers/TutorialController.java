@@ -1,20 +1,19 @@
 package com.sequoia.tutorial.controllers;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
 
 import com.sequoia.tutorial.models.ResponseData;
+import com.sequoia.tutorial.models.TutorialModel;
+import com.sequoia.tutorial.service.FileService;
 import com.sequoia.tutorial.service.Services;
-import org.springframework.data.domain.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Repository;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.sequoia.tutorial.models.TutorialModel;
-import com.sequoia.tutorial.repository.TutorialRepository;
 
 @RestController
 @RequestMapping("api/")
@@ -22,7 +21,16 @@ import com.sequoia.tutorial.repository.TutorialRepository;
 public class TutorialController {
     @Autowired
     Services services;
+    @Autowired
+    FileService excelService;
 
+    /**
+     * @param topicName
+     * @param subTopicName
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/fetchTutorialLinks")
     public ResponseData tutorialLinks(
             @RequestParam String topicName,
@@ -33,6 +41,11 @@ public class TutorialController {
         return services.fetchTutorialLinks(topicName, subTopicName, page, size);
     }
 
+    /**
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/fetchAllTutorialLink")
     public ResponseData getAllWithPagination(
             @RequestParam(defaultValue = "0") int page,
@@ -41,6 +54,12 @@ public class TutorialController {
         return services.fetchAllTutorialLink(page,size);
     }
 
+    /**
+     * @param subTopicNames
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/fetchTutorialLinkMultipleSubTopics")
     public @ResponseBody ResponseData getTutorialLinksMultipleSubTopics(
             @RequestParam List<String> subTopicNames,
@@ -50,4 +69,40 @@ public class TutorialController {
         return services.fetchTutorialLinkMultipleSubTopics(subTopicNames,page,size);
     }
 
+    @GetMapping("/fetchAll")
+    public void gettutorial(HttpServletResponse res) throws IOException {
+            excelService.getExcelSheet( res);
+    }
+
+    @GetMapping("/export/excel")
+    public ResponseEntity<byte[]> exportTutorialsToExcel() throws IOException {
+        byte[] excelBytes = excelService.getAllTutorialsAsExcel();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "tutorials.xlsx");
+
+        return new ResponseEntity<>(excelBytes, headers, org.springframework.http.HttpStatus.OK);
+    }
+    @PostMapping("fetchExcelFile")
+    public ResponseEntity<byte[]> exportasExcelFile(
+            @RequestBody List<TutorialModel> data
+            ) {
+        byte[] excelBytes = excelService.getTutorialsAsExcel(data);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "tutorials.xlsx");
+        return new ResponseEntity<>(excelBytes, headers, org.springframework.http.HttpStatus.OK);
+    }
+
+    @PostMapping("fetchCsvFile")
+    public ResponseEntity<byte[]> exportasCsvFile(
+            @RequestBody List<TutorialModel> data
+    ){
+        byte[] csvBytes = excelService.getTutorialsAsCsv(data);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "tuorials.csv");
+        return  new ResponseEntity<>(csvBytes, headers, org.springframework.http.HttpStatus.OK);
+    }
 }

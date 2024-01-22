@@ -3,11 +3,7 @@ package com.sequoia.tutorial.controllers;
 import com.sequoia.tutorial.models.ResponseData;
 import com.sequoia.tutorial.service.Services;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
-import com.sequoia.tutorial.models.SubTopicsModel;
-import com.sequoia.tutorial.repository.SubTopicsRepository;
 
 import java.util.List;
 
@@ -17,11 +13,20 @@ import java.util.List;
 public class SubTopicsController {
     @Autowired
     Services services;
+
+    /**
+     * @param topicName
+     * @return
+     */
     @GetMapping("/fetchSubTopics")
     public ResponseData subTopicsTopic(@RequestParam String topicName){
         return services.fetchSubTopics(topicName);
     }
 
+    /**
+     * @param topicNames
+     * @return
+     */
     @GetMapping("/fetchMultipleSubTopics")
     public  ResponseData multipleSubtopics(@RequestParam List<String> topicNames){
         return services.fetchMultipleSubTopics(topicNames);

@@ -16,6 +16,10 @@ import com.sequoia.tutorial.repository.SourceRepository;
 public class SourceController {
     @Autowired
     private SourceRepository sourceRepository;
+
+    /**
+     * @return 
+     */
     @GetMapping("/")
     public List<SourceModel> viewSource(){
         Sort sort = Sort.by("name").ascending();
