@@ -62,7 +62,7 @@ public class ServicesImpl implements Services {
         ResponseData responseData = new ResponseData();
         try{
             Sort sort = Sort.by("name").ascending();
-            List<SubTopicsModel> subTopicsModelList = subTopicsRepository.findByTopicsID_NameAndActive(topicName, true,sort);
+            List<SubTopicsModel> subTopicsModelList = subTopicsRepository.findByTopicsId_NameAndActive(topicName, true,sort);
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(subTopicsModelList);
@@ -83,7 +83,7 @@ public class ServicesImpl implements Services {
         ResponseData responseData = new ResponseData();
         try{
             Sort sort = Sort.by("name").ascending();
-            List<SubTopicsModel> subTopicsModelList = subTopicsRepository.findByTopicsID_NameInAndActiveIsTrue(topicNames,sort);
+            List<SubTopicsModel> subTopicsModelList = subTopicsRepository.findByTopicsId_NameInAndActiveIsTrue(topicNames,sort);
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(subTopicsModelList);
@@ -91,6 +91,7 @@ public class ServicesImpl implements Services {
 //            logger.error(e.getMessage());
             responseData.setStatusCode(RESPONSE_CODE_FAILURE);
             responseData.setMessage(RESPONSE_MESSAGE_FAILURE);
+
         }
         return responseData;
     }
@@ -107,13 +108,13 @@ public class ServicesImpl implements Services {
         ResponseData responseData = new ResponseData();
         try {
             PageRequest pages = PageRequest.of(page, size);
-            List<TutorialModel> paginatedTutorialModels = tutorialRepository.findBySubTopicsId_TopicsID_NameAndSubTopicsId_NameAndActive(
+            List<TutorialModel> paginatedTutorialModels = tutorialRepository.findBySubTopicsId_TopicsId_NameAndSubTopicsId_NameAndActive(
                     topicName,
                     subTopicName,
                     true,
                     pages
             );
-            Long totalCount = Long.valueOf(tutorialRepository.findBySubTopicsId_TopicsID_NameAndSubTopicsId_NameAndActive(
+            Long totalCount = Long.valueOf(tutorialRepository.findBySubTopicsId_TopicsId_NameAndSubTopicsId_NameAndActive(
                     topicName,
                     subTopicName,
                     true

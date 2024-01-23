@@ -12,6 +12,7 @@ public class SourceModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String name;
     @Column(name = "is_active")
     private Boolean active;

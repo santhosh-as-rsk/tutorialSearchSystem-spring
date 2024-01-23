@@ -8,20 +8,21 @@ public class SubTopicsModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String name;
     @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "topics_id")
-    private TopicsModel topicsID;
+    private TopicsModel topicsId;
     @Column(name = "is_active")
     private Boolean active;
 
     public SubTopicsModel() {
     }
 
-    public SubTopicsModel(Long id, String name, TopicsModel topicsID, Boolean active) {
+    public SubTopicsModel(Long id, String name, TopicsModel topicsId, Boolean active) {
         this.id = id;
         this.name = name;
-        this.topicsID = topicsID;
+        this.topicsId = topicsId;
         this.active = active;
     }
 
@@ -41,12 +42,12 @@ public class SubTopicsModel {
         this.name = name;
     }
 
-    public TopicsModel getTopicsID() {
-        return topicsID;
+    public TopicsModel getTopicsId() {
+        return topicsId;
     }
 
-    public void setTopicsID(TopicsModel topicsID) {
-        this.topicsID = topicsID;
+    public void setTopicsId(TopicsModel topicsID) {
+        this.topicsId = topicsID;
     }
 
     public Boolean getActive() {

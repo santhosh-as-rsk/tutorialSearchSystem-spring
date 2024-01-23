@@ -7,6 +7,7 @@ public class TutorialModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String links;
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "source_id")

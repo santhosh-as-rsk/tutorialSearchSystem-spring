@@ -13,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 
 @RestController
@@ -104,5 +106,15 @@ public class TutorialController {
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", "tuorials.csv");
         return  new ResponseEntity<>(csvBytes, headers, org.springframework.http.HttpStatus.OK);
+    }
+
+    @PostMapping(value="/importExcelFile",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseData importExcelFile(@RequestParam MultipartFile file){
+        System.out.println(file.getOriginalFilename());
+        return new ResponseData();
+    }
+    @PostMapping("/upload")
+    public ResponseData handleFileUpload(@RequestParam("file") MultipartFile file) {
+        return excelService.importExcelFile(file);
     }
 }
