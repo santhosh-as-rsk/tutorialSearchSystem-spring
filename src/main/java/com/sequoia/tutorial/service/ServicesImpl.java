@@ -3,8 +3,9 @@ package com.sequoia.tutorial.service;
 import java.util.HashMap;
 import java.util.List;
 
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
+import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import static com.sequoia.tutorial.constants.constant.*;
 
 @Service
 public class ServicesImpl implements Services {
+    Logger logger = LoggerFactory.getLogger(ServicesImpl.class);
     @Autowired
     TopicsRepository topicsRepository;
     @Autowired
@@ -31,7 +33,6 @@ public class ServicesImpl implements Services {
 
     @Autowired
     TutorialRepository tutorialRepository;
-//    private static final  Log logger = LogFactory.getLog(ServicesImpl.class);
 
     /**
      * @return
@@ -42,11 +43,12 @@ public class ServicesImpl implements Services {
         try{
             Sort sort = Sort.by("name").ascending();
             List<TopicsModel> topicsModel = topicsRepository.findAll(sort);
+            logger.info("Topics data fetched successfully");
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(topicsModel);
         }catch (Exception e){
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             responseData.setStatusCode(RESPONSE_CODE_FAILURE);
             responseData.setMessage(RESPONSE_MESSAGE_FAILURE);
         }
@@ -63,13 +65,16 @@ public class ServicesImpl implements Services {
         try{
             Sort sort = Sort.by("name").ascending();
             List<SubTopicsModel> subTopicsModelList = subTopicsRepository.findByTopicsId_NameAndActive(topicName, true,sort);
+            if (subTopicsModelList.size() == 0){ throw  new EntityNotFoundException("Entity not found for given topic name -> "+ topicName);}
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(subTopicsModelList);
+            logger.info("Sub Topics data fetched successfully");
         }catch (Exception e){
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             responseData.setStatusCode(RESPONSE_CODE_FAILURE);
             responseData.setMessage(RESPONSE_MESSAGE_FAILURE);
+            responseData.setOutputData(e.getMessage());
         }
         return responseData;
     }
@@ -87,8 +92,9 @@ public class ServicesImpl implements Services {
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(subTopicsModelList);
+            logger.info("subtopics fetched successfully");
         }catch (Exception e){
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             responseData.setStatusCode(RESPONSE_CODE_FAILURE);
             responseData.setMessage(RESPONSE_MESSAGE_FAILURE);
 
@@ -128,8 +134,9 @@ public class ServicesImpl implements Services {
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(outputData);
+            logger.info("tutorial links fetched successfully");
         }catch (Exception e){
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             responseData.setStatusCode(RESPONSE_CODE_FAILURE);
             responseData.setMessage(RESPONSE_MESSAGE_FAILURE);
         }
@@ -157,8 +164,9 @@ public class ServicesImpl implements Services {
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(outputData);
+            logger.info("tutorial links fetched successfully");
         }catch (Exception e){
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             responseData.setStatusCode(RESPONSE_CODE_FAILURE);
             responseData.setMessage(RESPONSE_MESSAGE_FAILURE);
         }
@@ -192,8 +200,9 @@ public class ServicesImpl implements Services {
             responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
             responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
             responseData.setOutputData(outputData);
+            logger.info("tutorial links fetched successfully");
         }catch (Exception e){
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             responseData.setStatusCode(RESPONSE_CODE_FAILURE);
             responseData.setMessage(RESPONSE_MESSAGE_FAILURE);
         }

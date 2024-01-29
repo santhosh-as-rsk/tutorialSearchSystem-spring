@@ -10,10 +10,6 @@ import java.util.List;
 
 
 public interface FileService {
-    void getExcelSheet(HttpServletResponse response) throws IOException;
-
-    byte[] getAllTutorialsAsExcel();
-
     byte[] getTutorialsAsExcel(List<TutorialModel> tutorials);
 
     byte[] getTutorialsAsCsv(List<TutorialModel> tutorialModels);

@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
 
 @RestController
@@ -71,21 +70,6 @@ public class TutorialController {
         return services.fetchTutorialLinkMultipleSubTopics(subTopicNames,page,size);
     }
 
-    @GetMapping("/fetchAll")
-    public void gettutorial(HttpServletResponse res) throws IOException {
-            excelService.getExcelSheet( res);
-    }
-
-    @GetMapping("/export/excel")
-    public ResponseEntity<byte[]> exportTutorialsToExcel() throws IOException {
-        byte[] excelBytes = excelService.getAllTutorialsAsExcel();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "tutorials.xlsx");
-
-        return new ResponseEntity<>(excelBytes, headers, org.springframework.http.HttpStatus.OK);
-    }
     @PostMapping("fetchExcelFile")
     public ResponseEntity<byte[]> exportasExcelFile(
             @RequestBody List<TutorialModel> data
@@ -108,11 +92,6 @@ public class TutorialController {
         return  new ResponseEntity<>(csvBytes, headers, org.springframework.http.HttpStatus.OK);
     }
 
-    @PostMapping(value="/importExcelFile",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseData importExcelFile(@RequestParam MultipartFile file){
-        System.out.println(file.getOriginalFilename());
-        return new ResponseData();
-    }
     @PostMapping("/upload")
     public ResponseData handleFileUpload(@RequestParam("file") MultipartFile file) {
         return excelService.importExcelFile(file);
