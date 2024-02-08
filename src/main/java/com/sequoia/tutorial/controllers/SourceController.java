@@ -44,11 +44,12 @@ public class SourceController {
      * @return 
      */
     @GetMapping("/")
-    public List<SourceModel> viewSource(){
+    public void viewSource(){
         Sort sort = Sort.by("name").ascending();
         List<SourceModel> sourceModel = sourceRepository.findAll(sort);
         System.out.println(sourceModel);
-        return sourceModel;
+//        return sourceModel;
+        logger.info("passed");
     }
 
     @PostMapping("/trend-json")
