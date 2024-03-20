@@ -44,14 +44,38 @@ public class SourceController {
      * @return 
      */
     @GetMapping("/")
-    public void viewSource(){
+    public ResponseData viewSource(){
+        ResponseData responseData = new ResponseData();
         Sort sort = Sort.by("name").ascending();
         List<SourceModel> sourceModel = sourceRepository.findAll(sort);
         System.out.println(sourceModel);
 //        return sourceModel;
         logger.info("passed");
+        responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
+        responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
+        responseData.setOutputData(sourceModel);
+        return responseData;
     }
-
+    @PostMapping("/")
+    public ResponseData updateSource(@RequestParam String source){
+        System.out.println(source);
+        logger.info(source);
+        ResponseData responseData = new ResponseData();
+        if (sourceRepository.findName(source)){
+            responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
+            responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
+            responseData.setOutputData("not saved");
+            return responseData;
+        }
+        SourceModel sourceModel = new SourceModel();
+        sourceModel.setName(source.toLowerCase());
+        sourceModel.setActive(true);
+        SourceModel savedSourceModel = sourceRepository.save(sourceModel);
+        responseData.setMessage(RESPONSE_MESSAGE_SUCCESS);
+        responseData.setStatusCode(RESPONSE_CODE_SUCCESS);
+        responseData.setOutputData("saved successfully");
+        return responseData;
+    }
     @PostMapping("/trend-json")
     public ResponseEntity<byte[]> viewJson(@RequestParam MultipartFile file) {
         try {

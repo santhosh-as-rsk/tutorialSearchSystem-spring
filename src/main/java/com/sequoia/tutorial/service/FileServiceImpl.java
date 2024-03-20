@@ -98,9 +98,9 @@ public class FileServiceImpl implements FileService {
                 while (headerCellIterator.hasNext()) {
                     Cell headerCell = headerCellIterator.next();
                     String headerCellValue = dataFormatter.formatCellValue(headerCell);
-                    headerValues.add(headerCellValue);
+                    headerValues.add(headerCellValue.toLowerCase());
                 }
-                List<String> expectedHeader = Arrays.asList("Topics", "SubTopics", "Links", "Source");
+                List<String> expectedHeader = Arrays.asList("topics", "subtopics", "links", "source");
                 if (!headerValues.equals(expectedHeader)) {
                     throw new RuntimeException("Invalid header. Expected: " + expectedHeader + ", Actual: " + headerValues);
                 }
